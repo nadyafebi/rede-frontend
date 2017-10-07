@@ -36,12 +36,24 @@ div.box {
   width : 320px;
   height: 30px;
 }
+
 #search-icon {
   top: 50px;
   left: 710px;
 }
 
+input {
+  border: 0px solid rgba(0,0,0,0.12);
+  border-bottom-width: 2px;
+  background-color: transparent;
+}
 
+.simplebox {
+  outline: none;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
 
 /* Map Style */
 
