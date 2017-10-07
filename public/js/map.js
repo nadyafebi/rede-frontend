@@ -31,8 +31,8 @@ function initMap() {
 
 // Input handling
 inputButton.addEventListener('click', function() {
-  inputText = inputTextBox.innerHTML;
-  inputLang = inputLangBox.innerHTML;
+  inputText = inputTextBox.value;
+  inputLang = inputLangBox.value;
 
   translate(inputText, inputLang);
   highlightMap();
@@ -41,7 +41,7 @@ inputButton.addEventListener('click', function() {
 
 function translate(text, lang) {
   var url = "https://rede-182207.appspot.com/?lang=" + lang + "&text=" + text;
-  $.get(url, function(data) {
+  $.getJSON(url, function(data) {
     console.log(data);
   });
 }
