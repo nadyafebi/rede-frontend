@@ -2,6 +2,7 @@
 var map;
 var styledMapType;
 var infoWindow;
+var coord;
 
 // Input-related Variables
 var inputTextBox = $('#text-box')[0];
@@ -49,6 +50,7 @@ function initMap() {
   body.appendChild(script);
 }
 
+
 // Draw countries on map.
 function drawMap(data) {
   var rows = data['rows'];
@@ -73,8 +75,10 @@ function drawMap(data) {
         fillColor: '#00FF00',
         fillOpacity: 0
       });
-      google.maps.event.addListener(country, 'mouseover', function() {
-        showWindow(countryName);
+
+      google.maps.event.addListener(country, 'mouseover', function(event) {
+        coord = getCoordinates(event.latLng);
+        showWindow();
         this.setOptions({fillOpacity: 0.25});
       });
       google.maps.event.addListener(country, 'mouseout', function() {
@@ -85,6 +89,15 @@ function drawMap(data) {
       country.setMap(map);
     }
   }
+}
+
+function getCoordinates(pnt) {
+  var latitude = pnt.lat();
+  latitude = latitude.toFixed(4);
+  var longitude = pnt.lng();
+  longitude = longitude.toFixed(4);
+  var coord = {lat: latitude, lng: longitude}
+  return coord;
 }
 
 // Algorithm from Google to make coordinates.
@@ -141,10 +154,10 @@ function createWindow() {
   });
 }
 
-function showWindow(name) {
+function showWindow() {
   if (isInput)
   {
-    infoWindow.setContent(name);
+    infoWindow.setContent(coord.lat);
     infoWindow.open(map);
   }
 }
@@ -155,21 +168,3 @@ function hideWindow() {
       infoWindow.close();
   }
 }
-
-/*
-function createWindow(name) {
-  var contentString = name + ' Здравствуйте';
-
-  var infoWindow = new google.maps.InfoWindow({
-    content: contentString,
-    position: {lat: 61.495, lng: 104.98315},
-    disableAutoPan: true
-  });
-
-  infoWindow.open(map);
-}
-
-function removeWindow(name) {
-
-}
-*/
