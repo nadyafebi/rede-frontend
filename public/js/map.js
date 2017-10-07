@@ -1,11 +1,14 @@
 // Map-related Variables
 var map;
 var styledMapType;
+var infoWindow;
 
 // Input-related Variables
 var inputTextBox = $('#text-box')[0];
 var inputLangBox = $('#lang-box')[0];
 var inputButton = $('#submit-button')[0];
+var translation;
+var isInput = false;
 
 // Map Creation
 function initMap() {
@@ -28,6 +31,9 @@ function initMap() {
     map.setMapTypeId('styled_map');
   });
 
+  // Create a changeable info window.
+  createWindow();
+
   // Request fusion table for countries data.
   var script = document.createElement('script');
   var url = ['https://www.googleapis.com/fusiontables/v2/query?'];
@@ -47,7 +53,9 @@ function initMap() {
 function drawMap(data) {
   var rows = data['rows'];
   for (var i in rows) {
-    if (rows[i][0] != 'Antarctica') {
+    var countryName = rows[i][0];
+    console.log(countryName);
+    if (countryName != 'Antarctica') {
       var newCoordinates = [];
       var geometries = rows[i][1]['geometries'];
       if (geometries) {
@@ -66,9 +74,11 @@ function drawMap(data) {
         fillOpacity: 0
       });
       google.maps.event.addListener(country, 'mouseover', function() {
+        showWindow(countryName);
         this.setOptions({fillOpacity: 0.25});
       });
       google.maps.event.addListener(country, 'mouseout', function() {
+        hideWindow();
         this.setOptions({fillOpacity: 0});
       });
 
@@ -93,14 +103,13 @@ inputButton.addEventListener('click', function() {
   inputLang = inputLangBox.value;
 
   translate(inputText, inputLang);
-  highlightMap();
-  createWindow();
 });
 
 function translate(text, lang) {
   var url = "https://cors-anywhere.herokuapp.com/https://rede-182207.appspot.com/?lang=" + lang + "&text=" + text;
   $.getJSON(url, function(data) {
-    console.log(data);
+    translation = data;
+    isInput = true;
   });
 }
 
@@ -123,12 +132,44 @@ function highlightMap() {
 }
 
 function createWindow() {
-  var contentString = 'Здравствуйте';
+  var contentString = '<p id="country-name"></p><p id="translation"></p>';
+
+  infoWindow = new google.maps.InfoWindow({
+    content: contentString,
+    position: {lat: 0, lng: 0},
+    disableAutoPan: true
+  });
+}
+
+function showWindow(name) {
+  if (isInput)
+  {
+    infoWindow.setContent(name);
+    infoWindow.open(map);
+  }
+}
+
+function hideWindow() {
+  if (isInput)
+  {
+      infoWindow.close();
+  }
+}
+
+/*
+function createWindow(name) {
+  var contentString = name + ' Здравствуйте';
 
   var infoWindow = new google.maps.InfoWindow({
     content: contentString,
-    position: {lat: 61.495, lng: 104.98315}
+    position: {lat: 61.495, lng: 104.98315},
+    disableAutoPan: true
   });
 
   infoWindow.open(map);
 }
+
+function removeWindow(name) {
+
+}
+*/
