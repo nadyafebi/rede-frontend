@@ -6,16 +6,29 @@ body {
 a {
   color: #00B7FF;
 }
-#inputBox {
-	z-index: 2;
-	position: fixed;
-	top: 50px;
-	left: 50px;
-  height: 30px;
-  width : 342px;
 
-
+div.box {
+  z-index: 2;
+  background-color:white;
+  box-sizing: border-box;
+  position : fixed;
+  top : 40px;
+  left : 35px;
+  width : 370px;
+  height : 50px;
+  box-shadow: 5px 2px 2px grey;
 }
+
+#inputBox {
+  z-index: 3;
+  position: fixed;
+  top: 50px;
+  left: 50px;
+  width : 320px;
+  height: 30px;
+}
+
+
 
 /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
