@@ -2,20 +2,41 @@ var map;
 var styledMapType;
 
 function initMap() {
-  $.getJSON("js/mapstyle.json", function(data) {
-    styledMapType = new google.maps.StyledMapType(data);
-    styleMap();
-  });
-
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 30, lng: 0},
     zoom: Math.ceil(Math.log2($(window).width())) - 8,
+    minZoom: Math.ceil(Math.log2($(window).width())) - 8,
+    maxZoom: 5,
 
     mapTypeControl: false,
     streetViewControl: false,
     fullscreenControl: false
   });
 
+  $.getJSON("js/mapstyle.json", function(data) {
+    styledMapType = new google.maps.StyledMapType(data);
+    styleMap();
+  });
+
+  translate();
+
+  highlightMap();
+
+  createWindow();
+}
+
+function styleMap() {
+  map.mapTypes.set('styled_map', styledMapType);
+  map.setMapTypeId('styled_map');
+}
+
+function translate() {
+  $.get("https://crossorigin.me/https://rede-182207.appspot.com?lang=en&text=Hello", function(data) {
+    console.log(data);
+  });
+}
+
+function highlightMap() {
   var world_geometry = new google.maps.FusionTablesLayer({
     query: {
       select: 'geometry',
@@ -31,13 +52,6 @@ function initMap() {
     map: map,
     suppressInfoWindows: true
   });
-
-  createWindow();
-}
-
-function styleMap() {
-  map.mapTypes.set('styled_map', styledMapType);
-  map.setMapTypeId('styled_map');
 }
 
 function createWindow() {
