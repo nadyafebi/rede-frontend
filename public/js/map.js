@@ -3,12 +3,13 @@ var map;
 var styledMapType;
 var infoWindow;
 var coord;
+var coordObj;
 
 // Input-related Variables
 var inputTextBox = $('#text-box')[0];
 var inputLangBox = $('#lang-box')[0];
 var inputButton = $('#submit-button')[0];
-var translation;
+var contentString;
 var isInput = false;
 
 // Map Creation
@@ -56,7 +57,6 @@ function drawMap(data) {
   var rows = data['rows'];
   for (var i in rows) {
     var countryName = rows[i][0];
-    console.log(countryName);
     if (countryName != 'Antarctica') {
       var newCoordinates = [];
       var geometries = rows[i][1]['geometries'];
@@ -77,7 +77,7 @@ function drawMap(data) {
       });
 
       google.maps.event.addListener(country, 'mouseover', function(event) {
-        coord = getCoordinates(event.latLng);
+        getCoordinates(event.latLng);
         showWindow();
         this.setOptions({fillOpacity: 0.25});
       });
@@ -96,8 +96,8 @@ function getCoordinates(pnt) {
   latitude = latitude.toFixed(4);
   var longitude = pnt.lng();
   longitude = longitude.toFixed(4);
-  var coord = {lat: latitude, lng: longitude}
-  return coord;
+  coord = {lat: latitude, lng: longitude};
+  coordObj = new google.maps.LatLng(latitude, longitude);
 }
 
 // Algorithm from Google to make coordinates.
@@ -145,7 +145,7 @@ function highlightMap() {
 }
 
 function createWindow() {
-  var contentString = '<p id="country-name"></p><p id="translation"></p>';
+  contentString = '';
 
   infoWindow = new google.maps.InfoWindow({
     content: contentString,
@@ -157,8 +157,14 @@ function createWindow() {
 function showWindow() {
   if (isInput)
   {
-    infoWindow.setContent(coord.lat);
-    infoWindow.open(map);
+    var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coord.lat + "," + coord.lng + "&key=" + GEOCODING_API_KEY;
+    $.getJSON(url, function (data) {
+      var country = getCountry(data.results[0].address_components);
+      var translated = translate();
+      infoWindow.setContent(country);
+      infoWindow.setPosition(coordObj);
+      infoWindow.open(map);
+    });
   }
 }
 
@@ -167,4 +173,18 @@ function hideWindow() {
   {
       infoWindow.close();
   }
+}
+
+function getCountry(addrComponents) {
+    for (var i = 0; i < addrComponents.length; i++) {
+        if (addrComponents[i].types[0] == "country") {
+            return addrComponents[i].long_name;
+        }
+        if (addrComponents[i].types.length == 2) {
+            if (addrComponents[i].types[0] == "political") {
+                return addrComponents[i].long_name;
+            }
+        }
+    }
+    return false;
 }
