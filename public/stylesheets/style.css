@@ -14,7 +14,19 @@ div.box {
   position : fixed;
   top : 40px;
   left : 35px;
-  width : 730px;
+  width : 500px;
+  height : 50px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.box2 {
+  z-index: 1;
+  background-color:white;
+  box-sizing: border-box;
+  position : fixed;
+  top : 90px;
+  left : 40px;
+  width : 375px;
   height : 50px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
@@ -24,22 +36,29 @@ div.box {
   position: fixed;
   top: 50px;
   left: 50px;
-  width : 320px;
+  width : 375px;
   height: 30px;
 }
 
 #lang-box {
   z-index: 3;
   position: fixed;
-  top: 50px;
-  left: 380px;
-  width : 320px;
+  top: 100px;
+  left: 50px;
+  width : 250px;
   height: 30px;
 }
 
-#search-icon {
-  top: 50px;
-  left: 710px;
+.search-icon {
+  font-size: 20px;
+  top: 15px;
+  left: 410px;
+}
+
+.random-icon {
+  font-size: 20px;
+  top: 15px;
+  left: 435px;
 }
 
 input {
@@ -53,13 +72,6 @@ input {
   -webkit-box-shadow: none !important;
   -moz-box-shadow: none !important;
   box-shadow: none !important;
-}
-
-#loadscreen {
-  z-index: 3;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(0,0,0,0.5);
 }
 
 /* Map Style */

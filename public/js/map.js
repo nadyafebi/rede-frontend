@@ -187,7 +187,7 @@ function showWindow() {
           countryName = "us";
           break;
         default:
-          countryName = countryName.replace(' ', '+');
+          countryName = countryName.split(' ').join('+');
       }
 
       var langUrl = "https://restcountries.eu/rest/v2/name/" + countryName;
