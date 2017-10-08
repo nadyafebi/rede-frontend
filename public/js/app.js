@@ -25,6 +25,9 @@ var langHover;          // The language that the user hover to.
 // Start website by hiding stuffs.
 loadingIcon.hide();
 
+// Geo API Key
+var geo_api_key = process.env['GEOCODING_API_KEY'];
+
 // Map initialization.
 function initMap() {
   // Create the map.
@@ -191,7 +194,7 @@ function createWindow() {
 function showWindow() {
   if (isInput)
   {
-    var geoUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordJS.lat + "," + coordJS.lng + "&key=" + process.env['GEOCODING_API_KEY'];
+    var geoUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordJS.lat + "," + coordJS.lng + "&key=" + geo_api_key;
     $.getJSON(geoUrl, function (data) {
       var countryName = getCountry(data.results[0].address_components);
 
