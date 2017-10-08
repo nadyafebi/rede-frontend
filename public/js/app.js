@@ -22,7 +22,7 @@ var langData;           // Translated strings from all languages.
 var langInput;          // The language that the user input.
 var langHover;          // The language that the user hover to.
 
-// Start website by hiding loading icon.
+// Start website by hiding stuffs.
 loadingIcon.hide();
 
 // Map initialization.
@@ -132,6 +132,10 @@ submitButton.addEventListener('click', function() {
   console.log("Clicked");
   searchIcon.hide();
   loadingIcon.show();
+  if (langBoxVisible) {
+    langBox.slideUp();
+    langBoxVisible = false;
+  }
 
   textInput = textBox.value;
   textInput = textInput.split(' ').join('+');
@@ -144,7 +148,7 @@ submitButton.addEventListener('click', function() {
 
     if (!langBoxVisible)
     {
-      langBox.show();
+      langBox.slideDown();
       langBoxVisible = true;
     }
 
@@ -266,6 +270,9 @@ function translate(countryName, langTrans) {
       break;
     case "Malaysia":
       langTrans = "ms";
+      break;
+    case "Cameroon":
+      langTrans = "fr";
       break;
   }
 
