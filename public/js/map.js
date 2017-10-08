@@ -11,6 +11,8 @@ var inputLangBox = $('#lang-box')[0];
 var inputButton = $('#submit-button')[0];
 var contentString;
 var isInput = false;
+var inputText;
+var inputLang;
 
 // Map Creation
 function initMap() {
@@ -51,7 +53,6 @@ function initMap() {
   body.appendChild(script);
 }
 
-
 // Draw countries on map.
 function drawMap(data) {
   var rows = data['rows'];
@@ -76,11 +77,14 @@ function drawMap(data) {
         fillOpacity: 0
       });
 
+      // Country hover event.
       google.maps.event.addListener(country, 'mouseover', function(event) {
         getCoordinates(event.latLng);
         showWindow();
         this.setOptions({fillOpacity: 0.25});
       });
+
+      // Country hover out event.
       google.maps.event.addListener(country, 'mouseout', function() {
         hideWindow();
         this.setOptions({fillOpacity: 0});
@@ -91,6 +95,7 @@ function drawMap(data) {
   }
 }
 
+// Get coordinates from mouse position.
 function getCoordinates(pnt) {
   var latitude = pnt.lat();
   latitude = latitude.toFixed(4);
@@ -114,77 +119,71 @@ function constructNewCoordinates(polygon) {
 inputButton.addEventListener('click', function() {
   inputText = inputTextBox.value;
   inputLang = inputLangBox.value;
-
-  translate(inputText, inputLang);
+  isInput = true;
 });
 
-function translate(text, lang) {
-  var url = "https://cors-anywhere.herokuapp.com/https://rede-182207.appspot.com/?lang=" + lang + "&text=" + text;
+// Translate text from one language to another.
+function translate(text, oriLang, transLang) {
+  var url = "https://cors-anywhere.herokuapp.com/https://rede-182207.appspot.com/?lang=" + oriLang + "&text=" + text;
   $.getJSON(url, function(data) {
-    translation = data;
-    isInput = true;
+    console.log(data[transLang]);
+    setWindow(data[transLang], coordObj);
   });
 }
 
-function highlightMap() {
-  var world_geometry = new google.maps.FusionTablesLayer({
-    query: {
-      select: 'geometry',
-      from: '1N2LBk4JHwWpOY4d9fobIn27lfnZ5MDy-NoqqRpk',
-      where: "ISO_2DIGIT IN ('RU', 'KZ', 'KG')"
-    },
-    styles: [{
-      polygonOptions: {
-        fillColor: '#00ff00',
-        fillOpacity: 0.25
-      }
-    }],
-    map: map,
-    suppressInfoWindows: true
-  });
-}
-
+// Create a changeable window.
 function createWindow() {
-  contentString = '';
-
   infoWindow = new google.maps.InfoWindow({
-    content: contentString,
+    content: '',
     position: {lat: 0, lng: 0},
     disableAutoPan: true
   });
 }
 
+// Show window at a certain position.
 function showWindow() {
   if (isInput)
   {
-    var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coord.lat + "," + coord.lng + "&key=" + GEOCODING_API_KEY;
-    $.getJSON(url, function (data) {
-      var country = getCountry(data.results[0].address_components);
-      var translated = translate();
-      infoWindow.setContent(country);
-      infoWindow.setPosition(coordObj);
-      infoWindow.open(map);
+    var geoUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coord.lat + "," + coord.lng + "&key=" + GEOCODING_API_KEY;
+    $.getJSON(geoUrl, function (data) {
+      var countryName = getCountry(data.results[0].address_components);
+      var langUrl = "https://restcountries.eu/rest/v2/name/" + countryName;
+      $.getJSON(langUrl, function (data1) {
+        var lang = data1[0].languages[0].iso639_1;
+        translate(inputText, inputLang, lang);
+      });
     });
   }
 }
 
+// Set window content.
+function setWindow(content, position)
+{
+  infoWindow.setContent(content);
+  infoWindow.setPosition(position);
+  infoWindow.open(map);
+}
+
+// Hide window when hover out.
 function hideWindow() {
   if (isInput)
   {
-      infoWindow.close();
+    infoWindow.setContent('');
+    infoWindow.close();
   }
 }
 
+// Get country name from Geocode API.
 function getCountry(addrComponents) {
-    for (var i = 0; i < addrComponents.length; i++) {
-        if (addrComponents[i].types[0] == "country") {
-            return addrComponents[i].long_name;
-        }
-        if (addrComponents[i].types.length == 2) {
-            if (addrComponents[i].types[0] == "political") {
-                return addrComponents[i].long_name;
-            }
-        }
+  for (var i = 0; i < addrComponents.length; i++) {
+    if (addrComponents[i].types[0] == "country") {
+      return addrComponents[i].short_name;
     }
-    return false;
+    if (addrComponents[i].types.length == 2) {
+      if (addrComponents[i].types[0] == "political") {
+        return addrComponents[i].short_name;
+      }
+    }
+  }
+  return false;
 }
