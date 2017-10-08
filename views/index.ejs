@@ -12,13 +12,11 @@
       <div class=''>
         <input id="text-box" class="simplebox" type="text" placeholder="Input text here.">
       </div>
-      <a id="submit-button"><i class="search-icon glyphicon glyphicon-search" ></i></a>
+      <a id="submit-button"><i id="search" class="search-icon glyphicon glyphicon-search" ></i><span id="loading" class="loading-icon glyphicon glyphicon-refresh glyphicon-refresh-animate"></span></a>
       <a><i class="random-icon glyphicon glyphicon-asterisk" ></i></a>
     </div>
-    <div class='box2'>
-      <div class=''>
-        <input id="lang-box" class="simplebox" type="text" placeholder="Input language here.">
-      </div>
+    <div id="lang-box" class='box2'>
+      <p class="light">Language detected: <span id="language" class="dark">English</span></p>
     </div>
   </form>
   <div id="map"></div>
@@ -26,7 +24,8 @@
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="/js/key.js"></script>
-  <script src="/js/map.js"></script>
+  <script src="/js/lang.js"></script>
+  <script src="/js/app.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASSzBIMIEK9ZYgrQE8vfWq_QV02w13lFQ&callback=initMap"
   async defer></script>
 </body>

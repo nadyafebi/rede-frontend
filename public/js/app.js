@@ -8,6 +8,7 @@ var coordObj;
 // Input-related Variables
 var inputTextBox = $('#text-box')[0];
 var inputLangBox = $('#lang-box')[0];
+var langBoxVisible = false;
 var inputButton = $('#submit-button')[0];
 var contentString;
 var isInput = false;
@@ -119,16 +120,49 @@ function constructNewCoordinates(polygon) {
 // Input handling.
 inputButton.addEventListener('click', function() {
   console.log("Clicked");
+  $('#search').hide();
+  $('#loading').show();
+
   inputText = inputTextBox.value;
   inputText = inputText.replace(' ', '+');
   inputLang = inputLangBox.value;
-  var url = "https://cors-anywhere.herokuapp.com/https://rede-182207.appspot.com/?lang=" + inputLang + "&text=" + inputText;
+
+  var url = "https://cors-anywhere.herokuapp.com/https://rede-182207.appspot.com/?lang=auto&text=" + inputText;
+
   $.getJSON(url, function (data) {
     langData = data;
+    inputLang = langData.detected_language;
+    if (!langBoxVisible)
+    {
+      $('#lang-box').show();
+      langBoxVisible = true;
+    }
+
+    var languageName = convertLanguage(inputLang);
+
+    $('#language')[0].innerHTML = languageName;
     isInput = true;
+
+    $('#search').show();
+    $('#loading').hide();
     console.log("Done");
   });
 });
+
+function convertLanguage(lang) {
+  var arr = [];
+  for (i in isoLangs) {
+    arr.push([i, isoLangs[i]]);
+  }
+
+  var language;
+  for (var i = 0; i < arr.length; i++) {
+    if (inputLang == arr[i][0]) {
+      language = arr[i][1]['name'];
+    }
+  }
+  return language;
+}
 
 // Translate text from one language to another.
 function translate(countryName, transLang) {
@@ -136,6 +170,10 @@ function translate(countryName, transLang) {
   if (countryName == "India")
   {
     transLang = "hi";
+  }
+  if (countryName == "Pakistan")
+  {
+    transLang = "ur";
   }
   if (countryName == "Malaysia")
   {
