@@ -13,6 +13,7 @@ var contentString;
 var isInput = false;
 var inputText;
 var inputLang;
+var langData;
 
 // Map Creation
 function initMap() {
@@ -117,18 +118,31 @@ function constructNewCoordinates(polygon) {
 
 // Input handling.
 inputButton.addEventListener('click', function() {
+  console.log("Clicked");
   inputText = inputTextBox.value;
+  inputText = inputText.replace(' ', '+');
   inputLang = inputLangBox.value;
-  isInput = true;
+  var url = "https://cors-anywhere.herokuapp.com/https://rede-182207.appspot.com/?lang=" + inputLang + "&text=" + inputText;
+  $.getJSON(url, function (data) {
+    langData = data;
+    isInput = true;
+    console.log("Done");
+  });
 });
 
 // Translate text from one language to another.
-function translate(text, oriLang, transLang) {
-  var url = "https://cors-anywhere.herokuapp.com/https://rede-182207.appspot.com/?lang=" + oriLang + "&text=" + text;
-  $.getJSON(url, function(data) {
-    console.log(data[transLang]);
-    setWindow(data[transLang], coordObj);
-  });
+function translate(countryName, transLang) {
+  // Names exception
+  if (countryName == "India")
+  {
+    transLang = "hi";
+  }
+  if (countryName == "Malaysia")
+  {
+    transLang = "ms";
+  }
+
+  setWindow(langData[transLang], coordObj);
 }
 
 // Create a changeable window.
@@ -147,10 +161,39 @@ function showWindow() {
     var geoUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coord.lat + "," + coord.lng + "&key=" + GEOCODING_API_KEY;
     $.getJSON(geoUrl, function (data) {
       var countryName = getCountry(data.results[0].address_components);
+
+      // Names exception
+      switch(countryName)
+      {
+        case "South Korea":
+        case "North Korea":
+          countryName = "korea";
+          break;
+        case "New Zealand":
+          countryName = "australia";
+          break;
+        case "Republic of the Congo":
+        case "Democratic Republic of the Congo":
+          countryName = "congo";
+          break;
+        case "United Arab Emirates":
+        case "Saudi Arabia":
+          countryName = "arabia";
+          break;
+        case "Myanmar (Burma)":
+          countryName = "myanmar";
+          break;
+        case "United States":
+          countryName = "us";
+          break;
+        default:
+          countryName = countryName.replace(' ', '+');
+      }
+
       var langUrl = "https://restcountries.eu/rest/v2/name/" + countryName;
       $.getJSON(langUrl, function (data1) {
         var lang = data1[0].languages[0].iso639_1;
-        translate(inputText, inputLang, lang);
+        translate(countryName, lang);
       });
     });
   }
@@ -177,11 +220,11 @@ function hideWindow() {
 function getCountry(addrComponents) {
   for (var i = 0; i < addrComponents.length; i++) {
     if (addrComponents[i].types[0] == "country") {
-      return addrComponents[i].short_name;
+      return addrComponents[i].long_name;
     }
     if (addrComponents[i].types.length == 2) {
       if (addrComponents[i].types[0] == "political") {
-        return addrComponents[i].short_name;
+        return addrComponents[i].long_name;
       }
     }
   }

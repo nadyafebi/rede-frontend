@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html>
-  <head>
-  	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><%= title %></title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %></title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
   <form>
-  <div class='box'>
-    <div class=''>
-      <input id="text-box" class="simplebox" type="text" placeholder="Input text here.">
+    <div class='box'>
+      <div class=''>
+        <input id="text-box" class="simplebox" type="text" placeholder="Input text here.">
+      </div>
+      <div class=''>
+        <input id="lang-box" class="simplebox" type="text" placeholder="Input language here.">
+      </div>
+      <a id="submit-button" style="position: fixed; top: 55px; left: 720px;"><i class="glyphicon glyphicon-search" ></i></a>
     </div>
-    <div class=''>
-      <input id="lang-box" class="simplebox" type="text" placeholder="Input language here.">
-    </div>
-    <a id="submit-button" style="position: fixed; top: 55px; left: 720px;"><i class="glyphicon glyphicon-search" ></i></a>
-  </div>
   </form>
-    <div id="map"></div>
+  <div id="loadscreen"></div>
+  <div id="map"></div>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="/js/key.js"></script>
-    <script src="/js/map.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASSzBIMIEK9ZYgrQE8vfWq_QV02w13lFQ&callback=initMap"
-    async defer></script>
-  </body>
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="/js/key.js"></script>
+  <script src="/js/map.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASSzBIMIEK9ZYgrQE8vfWq_QV02w13lFQ&callback=initMap"
+  async defer></script>
+</body>
 </html>

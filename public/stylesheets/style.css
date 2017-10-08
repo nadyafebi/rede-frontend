@@ -55,6 +55,13 @@ input {
   box-shadow: none !important;
 }
 
+#loadscreen {
+  z-index: 3;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
 /* Map Style */
 
 html, body {
