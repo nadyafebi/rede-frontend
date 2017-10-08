@@ -25,9 +25,6 @@ var langHover;          // The language that the user hover to.
 // Start website by hiding stuffs.
 loadingIcon.hide();
 
-// Geo API Key
-var geo_api_key = process.env['GEOCODING_API_KEY'];
-
 // Map initialization.
 function initMap() {
   // Create the map.
