@@ -194,7 +194,7 @@ function createWindow() {
 function showWindow() {
   if (isInput)
   {
-    var geoUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordJS.lat + "," + coordJS.lng + "&key=" + geo_api_key;
+    var geoUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordJS.lat + "," + coordJS.lng + "&key=AIzaSyAvm9iztqVSlyrr8ePE1NmPsLlLN8VSe7Q";
     $.getJSON(geoUrl, function (data) {
       var countryName = getCountry(data.results[0].address_components);
 
