@@ -8,6 +8,10 @@ Made by:
 * Diane Tobit ([@diane27](https://github.com/diane27))
 * Nadya Djojosantoso ([@nadyafebi](https://github.com/nadyafebi))
 
+[Link to Devpost project](https://devpost.com/software/rede)
+
+[Link to original repositories](https://github.com/Rede-CalHacks4)
+
 ## Inspiration
 With the boom of technology, people are interacting with others who may not speak the same language on a much more regular basis than they were ten years ago. Learning a new language from scratch often involves hundreds of hours of practice, and often times, a person will not end up using a lot of the vocabulary that they spent countless hours learning. Rede adopts a new and more casual approach to language learning as compared to other tools such as Quizlet or Babbel. Through Rede, a user can easily and interactively learn translations for phrases that are most relevant to them without spending hours memorizing boring flashcards.
 
